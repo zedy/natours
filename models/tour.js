@@ -101,6 +101,12 @@ tourScheme.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+tourScheme.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour', // on Review model the field which holds the Parents [this] ID
+  localField: '_id'
+});
+
 // tourScheme.pre('save', async function (next) {
 //   if (this.guides === [] || this.guides === '' || this.guides === undefined)
 //     next();

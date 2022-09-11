@@ -4,6 +4,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import tours from './routes/tours.js';
 import users from './routes/users.js';
+import reviews from './routes/reviews.js'
 import AppError from './utils/appError.js';
 import helmet from 'helmet';
 
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 // routes
 app.use('/api', tours);
 app.use('/api', users);
+app.use('/api', reviews);
 
 app.all('*', (req, res, next) => {
   next(new AppError('Oh oh 404', 404));
