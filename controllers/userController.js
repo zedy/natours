@@ -14,10 +14,6 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 const updateUser = catchAsync(async (req, res, next) => {
-  // if () {
-  //   return next(new AppError('', ));
-  // }
-
   const opts = {
     new: true,
     runValidators: true
@@ -39,9 +35,6 @@ const updateUser = catchAsync(async (req, res, next) => {
 });
 
 const deleteUser = catchAsync(async (req, res, next) => {
-  // if () {
-  //   return next(new AppError('', ));
-  // }
   const data = {
     active: false
   };

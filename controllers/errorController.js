@@ -12,6 +12,7 @@ const handleDuplicateFieldsDB = err => {
   const message = `Duplicate field value: ${value}. Please use another value!`;
   return new AppError(message, 400);
 };
+
 const handleValidationErrorDB = err => {
   const errors = Object.values(err.errors).map(el => el.message);
 
@@ -22,7 +23,7 @@ const handleValidationErrorDB = err => {
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
-    error: err,
+    error: err,    
     message: err.message,
     stack: err.stack
   });

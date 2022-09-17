@@ -2,6 +2,7 @@
 import TourModel from '../models/tour.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/errorCatch.js';
+import { deleteOne, updateOne } from './handlerFactory.js';
 
 const getAllTours = catchAsync(async (req, res) => {
   const query = req.query;
@@ -59,34 +60,9 @@ const getTour = catchAsync(async (req, res, next) => {
   });
 });
 
-const updateTour = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-  const tour = await TourModel.findByIdAndUpdate(id, data, {
-    new: true,
-    runValidators: true,
-  });
+const updateTour = updateOne(TourModel);
 
-  if (!tour) {
-    return next(new AppError('Mismatched ID', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
-
-const deleteTour = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  await TourModel.findByIdAndDelete(id);
-  res.status(200).json({
-    status: 'success',
-    data: null,
-  });
-});
+const deleteTour = deleteOne(TourModel);
 
 const createTour = catchAsync(async (req, res) => {
   const tour = await new TourModel(req.body);

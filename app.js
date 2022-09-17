@@ -28,9 +28,9 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use('/api', tours);
+app.use('/api/tours', tours);
 app.use('/api', users);
-app.use('/api', reviews);
+app.use('/api/reviews', reviews);
 
 app.all('*', (req, res, next) => {
   next(new AppError('Oh oh 404', 404));
