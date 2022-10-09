@@ -1,8 +1,8 @@
 // models
 import TourModel from '../models/tour.js';
-import AppError from '../utils/appError.js';
 import catchAsync from '../utils/errorCatch.js';
-import { deleteOne, updateOne } from './handlerFactory.js';
+import { deleteOne, updateOne, getOne } from './handlerFactory.js';
+import AppError from '../utils/appError.js';
 
 const getAllTours = catchAsync(async (req, res) => {
   const query = req.query;
@@ -44,21 +44,7 @@ const getAllTours = catchAsync(async (req, res) => {
   });
 });
 
-const getTour = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const tour = await TourModel.findById(id).populate('reviews');
-
-  if (!tour) {
-    return next(new AppError('Mismatched ID', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
+const getTour = getOne(TourModel, { path: 'reviews' });
 
 const updateTour = updateOne(TourModel);
 
@@ -91,6 +77,7 @@ const getTourStats = catchAsync(async (req, res) => {
       },
     },
   ]);
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -142,6 +129,26 @@ const getMonthlyPlan = catchAsync(async (req, res) => {
   });
 });
 
+const getToursNearby = catchAsync(async (req, res, next) => {
+  const { distance, latitude, longitude } = req.body;
+
+  if (!distance || !latitude || !longitude) {
+    next(new AppError('Missing distance or geoSpec data', 400));
+  }
+
+  // geoLoc math stuff
+  const rad = distance / 6378.1;
+
+  const tour = await TourModel.find({
+    startLocation: { $geoWithin: { $centerSphere: [[longitude, latitude], rad] } },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: tour,
+  });
+});
+
 export {
   getMonthlyPlan,
   getTourStats,
@@ -150,4 +157,5 @@ export {
   getTour,
   createTour,
   updateTour,
+  getToursNearby,
 };

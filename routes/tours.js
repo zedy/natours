@@ -6,6 +6,7 @@ import {
   createTour,
   updateTour,
   deleteTour,
+  getToursNearby,
   getTourStats,
 } from '../controllers/toursController.js';
 import { auth, restrictTo } from '../controllers/authController.js';
@@ -26,15 +27,17 @@ router.use('/:tourId/reviews', reviewRouter);
 //   next();
 // });
 
+router.route('/tours-nearby').get(getToursNearby);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
 router.route('/stats').get(getTourStats);
 
-router.route('/').get(auth, getAllTours).post(createTour);
+router.route('/').get(getAllTours).post(auth, restrictTo('admin'), createTour);
 
 router
   .route('/:id')
   .get(getTour)
-  .patch(updateTour)
+  .patch(auth, restrictTo('admin'), updateTour)
   .delete(auth, restrictTo('admin'), deleteTour);
+
 
 export default router;

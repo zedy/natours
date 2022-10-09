@@ -4,10 +4,11 @@ import {
   createReview,
   deleteReview,
   updateReview,
+  getReview
 } from '../controllers/reviewController.js';
 import { auth, restrictTo } from '../controllers/authController.js';
 
-const router = express.Router({ mergeParams: true });
+const router = express. Router({ mergeParams: true });
 
 router
   .route('/')
@@ -16,6 +17,7 @@ router
 
 router
   .route('/:id')
+  .get(getReview)
   .patch(updateReview)
   .delete(auth, restrictTo('admin'), deleteReview);
 

@@ -34,6 +34,7 @@ const tourScheme = new Schema(
       type: Number,
       min: 1,
       max: 5,
+      set: val => Math.round(val * 10) / 10
     },
     ratingsQuantity: Number,
     priceDiscount: {
@@ -96,6 +97,9 @@ const tourScheme = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+tourScheme.index({ price: 1 });
+tourScheme.index({ slug: 1 });
 
 tourScheme.virtual('durationWeeks').get(function () {
   return this.duration / 7;

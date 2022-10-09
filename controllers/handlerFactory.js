@@ -39,4 +39,28 @@ const updateOne = (Model) =>
     });
   });
 
-export { deleteOne, updateOne };
+const getOne = (Model, opts) => catchAsync(async (req, res) => {
+  const { id } = req.params;
+  let query = Model.findById(id);
+
+  if (opts) {
+    query.populate(opts);
+  }
+
+  const document = await query;
+
+  if (!document) {
+    return next(new AppError("ID doesn't match any document.", 404));
+  }
+
+  const key = Model.modelName.toLowerCase();
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      [key]: document,
+    },
+  });
+});
+
+export { deleteOne, updateOne, getOne };

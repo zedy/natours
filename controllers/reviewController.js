@@ -1,7 +1,6 @@
-import AppError from '../utils/appError.js';
 import catchAsync from '../utils/errorCatch.js';
 import ReviewModel from '../models/review.js';
-import { deleteOne, updateOne } from './handlerFactory.js';
+import { deleteOne, updateOne, getOne } from './handlerFactory.js';
 
 const getAllReviews = catchAsync(async (req, res, next) => {
   let filter;
@@ -47,4 +46,6 @@ const deleteReview = deleteOne(ReviewModel);
 
 const updateReview = updateOne(ReviewModel);
 
-export { createReview, getAllReviews, deleteReview, updateReview };
+const getReview = getOne(ReviewModel);
+
+export { createReview, getAllReviews, deleteReview, updateReview, getReview };

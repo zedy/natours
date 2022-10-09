@@ -1,6 +1,6 @@
 import UserModel from '../models/user.js';
 import catchAsync from '../utils/errorCatch.js';
-import AppError from '../utils/appError.js';
+import { getOne } from '../controllers/handlerFactory.js';
 
 const getAllUsers = catchAsync(async (req, res, next) => {
   const users = await UserModel.find();
@@ -47,4 +47,6 @@ const deleteUser = catchAsync(async (req, res, next) => {
   });
 });
 
-export { getAllUsers, updateUser, deleteUser };
+const getUser = getOne(UserModel);
+
+export { getAllUsers, updateUser, deleteUser, getUser };

@@ -49,6 +49,12 @@ const userSchema = new Schema({
   passwordResetExpires: Date,
 });
 
+userSchema.pre(/^find/, function(next) {
+  this.find({active: { $ne: false }});
+  next();
+});
+
+// turn off this hook when importing users
 userSchema.pre('save', function(next) {
   if (!this.isModified('password') || this.isNew) return next();
 
@@ -56,11 +62,7 @@ userSchema.pre('save', function(next) {
   next();
 });
 
-userSchema.pre(/^find/, function(next) {
-  this.find({active: { $ne: false }});
-  next();
-});
-
+// turn off this hook when importing users
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) {
     return next();
